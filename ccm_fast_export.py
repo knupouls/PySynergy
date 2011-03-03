@@ -309,6 +309,23 @@ def fix_orphan_nodes(commit_graph, release):
     [commit_graph.add_edge((release, node)) for node in orphan_nodes if node != release]
     return commit_graph
 
+def breadth_first_search(graph, source):
+    queue = deque()
+    queue.append(source)
+    result_queue = deque()
+    while queue:
+        node = queue.popleft()
+        print "Node", node
+        result_queue.append(node)
+        neighbors = graph.neighbors(node)
+        for n in neighbors:
+            if n not in result_queue and n not in queue:
+                if graph.node_order(n) != 0:
+                    queue.append(n)
+                elif not queue and graph.node_order(n) == 0:
+                    queue.append(n)
+    return result_queue
+
 def get_mark(mark):
     mark +=1
     return mark
